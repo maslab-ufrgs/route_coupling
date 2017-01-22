@@ -38,18 +38,16 @@ outputfile.write("fftt MAX %f\n" % max(ffttmetrics))
 
 outputfile.close()
 
-
-
 import matplotlib.pyplot as plt
 
 plt.hist(hopmetrics)
-plt.title("Hop Distance Histogram")
-plt.xlabel("Hop Distance")
+plt.title("Hop Coupling Histogram")
+plt.xlabel("Hop Coupling")
 plt.ylabel("Frequency")
 plt.savefig(sys.argv[1]+ ".hopHistogram.png")
 plt.close()
 plt.hist(ffttmetrics)
-plt.title("FFTT Distance Histogram")
-plt.xlabel("FFTT Distance")
+plt.title("FFTT Coupling Histogram")
+plt.xlabel("FFTT Coupling")
 plt.ylabel("Frequency")
 plt.savefig(sys.argv[1]+ ".ffttHistogram.png")
