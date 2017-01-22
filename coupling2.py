@@ -94,7 +94,7 @@ if __name__=="__main__":
         output_file.write("<tr><td>%s</td><td>%s</td></tr>\n" % (sp.getSPName(), '  &rarr; '.join(sp.getLinks())))
     output_file.write("</table>\n\n")
     '''
-    textoutput = open('out.csv','w')
+    textoutput = open(sys.argv[1]+'.results.csv','w')
     textoutput.write("Route CouplingHop CouplingFFTT\n")
     routeAvgCouplingHOP = {}
     routeAvgCouplingFFTT = {}
