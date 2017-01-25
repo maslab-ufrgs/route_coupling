@@ -15,8 +15,8 @@ if __name__=="__main__":
     ODs.loadRoutesFromFile(sys.argv[1])
     rowSPNames   = ODs.getRow_of_SPsNames()
     rowLinkNames = ODs.getUniqueLinkNames()
-    print rowSPNames
-    print rowLinkNames
+    #print rowSPNames
+    #print rowLinkNames
 
     demands = {}
     for i in ODs.getODs():
@@ -47,8 +47,8 @@ if __name__=="__main__":
         for i in nDriversPerLink_indices:
             linkName = simulation_headers[i][3:]
             nDriversPerLink[linkName] = float(lastLineOfResults[i])
-        print "Drivers per link"
-        pprint.pprint(nDriversPerLink)
+        #print "Drivers per link"
+        #pprint.pprint(nDriversPerLink)
 
         SPNames_header=simulation_headers[-len(rowSPNames[1:]):]
         regex = re.compile(r'(.*)to(.*)_(.*)') # first group is origin node of a SP, second is destination, third is the # of this SP within the OD
@@ -60,7 +60,7 @@ if __name__=="__main__":
 
         nDriversPerOD = lastLineOfResults[-len(rowSPNames[1:]):] # gets last elements of results line; these are #drivers in each route of each OD
         nDriversPerOD = [float(i) for i in nDriversPerOD] # convert from string to float
-        print "Drivers per OD", nDriversPerOD
+        #print "Drivers per OD", nDriversPerOD
 
     # -------------------------------------------------
     routesfile = open("routes.txt", 'w')

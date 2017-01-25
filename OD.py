@@ -301,7 +301,7 @@ class KSPInstance:
             self.costs[link.name] = link.cost
 
     def getRoutes(self, origin, destination, k):
-        print origin, destination
+        #print origin, destination
 
         return KSP.getKRoutes(self.V, self.E, origin, destination, k)
 
