@@ -1,5 +1,5 @@
 #!/bin/bash
-networks = ("Berlin-Friedrichshain.net" "Berlin-Mitte-Center.net" "Berlin-Mitte-Prenzlauerberg-Friedrichshain-Center.net" "Berlin-Prenzlauerberg-Center.net" "OW.net" "SiouxFalls.net")
+networks=("Berlin-Friedrichshain.net" "Berlin-Mitte-Center.net" "Berlin-Mitte-Prenzlauerberg-Friedrichshain-Center.net" "Berlin-Prenzlauerberg-Center.net" "OW.net" "SiouxFalls.net")
 
 
 for n in "${networks[@]}"
