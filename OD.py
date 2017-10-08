@@ -32,6 +32,7 @@ class ODSet:
                     pair = ODPair(origin, destination, demand, self)
                     pair.calculateKSP(self.k, self.ksp_instance)
                     self.OD_Pairs.append(pair)
+        self.linksFFTT = self.ksp_instance.getAllLinksFFTT()
         filen.close()
 
     def writeRoutesToFile(self, outputfilename):
@@ -45,7 +46,7 @@ class ODSet:
             for sp in ODp.getSPs():
                 fileout.write(sp.__str__() + '\n')
                 fileout.write(str(sp.getCost()) + '\n')
-        self.linksFFTT = self.ksp_instance.getAllLinksFFTT()
+
         fileout.write("\nNLINKS: %d\n" % len(self.linksFFTT))
         for link in self.linksFFTT.keys():
             fileout.write("LINK: %s %f\n" % (link, self.linksFFTT[link]))
@@ -285,7 +286,7 @@ class ShortestPath:
             fFTT_SP += self.odpair.odset.linksFFTT[link]
 
         commonLinks = self.getCommonLinks(otherSP)
-        
+
         fFTT_SP_otherSP = 0.0
         for link in commonLinks:
             fFTT_SP_otherSP += self.odpair.odset.linksFFTT[link]
@@ -309,5 +310,3 @@ class KSPInstance:
     ##used only on calculateRoutes.py
     def getAllLinksFFTT(self):
         return self.costs
-
-
