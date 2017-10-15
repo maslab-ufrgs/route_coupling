@@ -3,6 +3,10 @@
 #for every od pair
 import sys
 import OD
+'''
+Calculates route files from a network file
+calculateRoutes.py inputnet k outputfile
+'''
 if __name__=="__main__":
     if len(sys.argv) < 4:
         print "calculateRoutes.py inputnet k outputfile"
@@ -10,4 +14,3 @@ if __name__=="__main__":
     ODs = OD.ODSet(int(sys.argv[2]))
     ODs.calculateKSProutes(sys.argv[1])
     ODs.writeRoutesToFile(sys.argv[3])
-

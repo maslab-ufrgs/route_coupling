@@ -3,6 +3,9 @@ from ksp import KSP
 epsilonMultiplier = 0.1
 from readUtils import *
 
+'''
+Defines OD and network related data structures
+'''
 
 class ODSet:
     # initializes network. Loads OD pairs
@@ -28,7 +31,6 @@ class ODSet:
                 destination = tokens[3]
                 demand = int(float(tokens[4]))
                 if(origin != destination and demand > 0):
-                    #print 'creating pair origin:%s, destination:%s' % (origin, destination)
                     pair = ODPair(origin, destination, demand, self)
                     pair.calculateKSP(self.k, self.ksp_instance)
                     self.OD_Pairs.append(pair)
@@ -54,14 +56,12 @@ class ODSet:
     def loadRoutesFromFile(self, routesfile):
         filedesc = open(routesfile, 'r')
         n_ODPairs = int(readNextWithTag(filedesc, "NODs:"))
-        #print "Will read %d OD pairs" % (n_ODPairs)
+
 
         for i in range(n_ODPairs):
             ODName = readNextWithTag(filedesc, "ODName:")
             n_SPs = int(readNextWithTag(filedesc, "NSPs:"))
             demand = int(readNextWithTag(filedesc, "DEMAND:"))
-           # print "\tOD pair #%d has name %s and %d shortest pairs" % (i, ODName, n_SPs)
-
             tokens = ODName.split('|')
             origin = tokens[0]
             destination = tokens[1]
@@ -82,14 +82,6 @@ class ODSet:
             tokens = line.split(" ")
             self.linksFFTT[tokens[0]] = float(tokens[1])
 
-
-        #for od in self.OD_Pairs:
-            #print "OD pair %s has %d SPs" % (od.name, len(od.SPs))
-            #for i in range(len(od.SPs)):
-                #print "\tSP %d: %s (cost %.2f)" % (i, od.getSP(i).getLinks(), od.getSP(i).getCost())
-       #for link in self.linksFFTT.keys():
-            #print "link %s has cost %d" % (link, self.linksFFTT[link] )
-
     def getODs(self):
         return self.OD_Pairs
 
@@ -109,16 +101,15 @@ class ODSet:
         for i in range(nSPs):
             SP1 = allSPs[i]
             if SP1.getODName() == curODName:
-                # rowNames.append('%s(%d)' % (curODName, curSPindex))
+
                 rowNames.append(SP1.name)
             else:
                 curODName = SP1.getODName()
                 curSPindex = 1
-                # rowNames[-1] = rowNames[-1] + '__|'
-                # rowNames.append('%s(%d)' % (curODName, curSPindex))
+
                 rowNames.append(SP1.name)
             curSPindex = curSPindex + 1
-            # print rowNames[-1]
+
         rowNames.sort()
         return rowNames
 
@@ -209,7 +200,6 @@ class ODSet:
 
 class ODPair:
     ##represents each OD pair on the network
-
     # generates shortest paths from KSP
     def __init__(self, origin, destination, demand, odset):
         self.origin = origin

@@ -15,7 +15,6 @@ Inputs:
 Outputs:
     csv file with data
 '''
-
 def calculate_coupling(nfile, rfile, sfile, k):
     ODs = OD.ODSet(k)
     if rfile is not None :
@@ -50,10 +49,8 @@ def calculate_coupling(nfile, rfile, sfile, k):
         tmp = simulation_file.readline() # skips first line of file with simulation results; header is in the 2nd one
         simulation_headers = simulation_file.readline()
         simulation_headers = simulation_headers.split()
-        #print "opa", len(simulation_headers)
-        #print "opa", simulation_headers
         nDriversPerLink_indices = [i for i in range(len(simulation_headers)) if simulation_headers[i].startswith('nd_')]
-        #print nDriversPerLink_indices
+
 
         for line in simulation_file:
             pass # skips all lines of the file, then reads the last one (last state of the system, at convegence)
@@ -62,8 +59,6 @@ def calculate_coupling(nfile, rfile, sfile, k):
         for i in nDriversPerLink_indices:
             linkName = simulation_headers[i][3:]
             nDriversPerLink[linkName] = float(lastLineOfResults[i])
-        #print "Drivers per link"
-        #pprint.pprint(nDriversPerLink)
 
         SPNames_header=simulation_headers[-len(rowSPNames[1:]):]
         regex = re.compile(r'(.*)to(.*)_(.*)') # first group is origin node of a SP, second is destination, third is the # of this SP within the OD
@@ -75,7 +70,6 @@ def calculate_coupling(nfile, rfile, sfile, k):
 
         nDriversPerOD = lastLineOfResults[-len(rowSPNames[1:]):] # gets last elements of results line; these are #drivers in each route of each OD
         nDriversPerOD = [float(i) for i in nDriversPerOD] # convert from string to float
-        #print "Drivers per OD", nDriversPerOD
 
     # -------------------------------------------------
 
@@ -83,7 +77,7 @@ def calculate_coupling(nfile, rfile, sfile, k):
     nSPs   = len(allSPs)
 
     textoutput = open(network_name+'.results.csv','w')
-    print network_name
+    print(network_name)
     textoutput.write("Route CouplingHop CouplingFFTT\n")
     routeAvgCouplingHOP = {}
     routeAvgCouplingFFTT = {}
@@ -103,7 +97,6 @@ def calculate_coupling(nfile, rfile, sfile, k):
         routeAvgCouplingHOP[rowSPNames[cur_row]] = float(sumCouplingsHOP)/(nSPs-1)  # -1 because we didn't count the route against itself
         routeAvgCouplingFFTT[rowSPNames[cur_row]] = (float(sumCouplingsFFTT) / (nSPs - 1)) * 100
         textoutput.write(rowSPNames[cur_row] +' '+ str(routeAvgCouplingHOP[rowSPNames[cur_row]]) +' '+ str(routeAvgCouplingFFTT[rowSPNames[cur_row]]) +'\n' )
-        #inter_route_table.add_row(row_contents)
         cur_row = cur_row + 1
     textoutput.close()
 
