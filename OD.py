@@ -17,25 +17,34 @@ class ODSet:
         self.k = k
     ##using the network file and k calculates the shortest
     # paths of every OD pair
-    def calculateKSProutes(self, network_filename):
-        # open network with ksp
-        self.ksp_instance = KSPInstance(network_filename, 0.0)
-        #### loads od information
-        filen = open(network_filename, 'r')
-        for line in filen:
-            if line[0:2] == 'od':
-                line = line.replace('\n', '')
-                tokens = line.split(' ')
+    def calculateKSProutes(self, network_filename, edge_list=None, node_list=None, od_matrix=None):
+        if edge_list and node_list and od_matrix:
+            self.ksp_instance = KSPInstance(network_filename, edge_list=edge_list,
+                    node_list=node_list, od_matrix=od_matrix)
+            for od in od_matrix.keys:
+                pair = ODPair(od.split('|')[0], od.split('|')[1], int(od_matrix[od]), self)
+                pair.calculateKSP(self.k, self.ksp_instance)
+                self.OD_Pairs.append(pair)
+            self.linksFFTT = self.ksp_instance.getAllLinksFFTT()
+        else:
+            # open network with ksp
+            self.ksp_instance = KSPInstance(network_filename, 0.0)
+            #### loads od information
+            filen = open(network_filename, 'r')
+            for line in filen:
+                if line[0:2] == 'od':
+                    line = line.replace('\n', '')
+                    tokens = line.split(' ')
 
-                origin = tokens[2]
-                destination = tokens[3]
-                demand = int(float(tokens[4]))
-                if(origin != destination and demand > 0):
-                    pair = ODPair(origin, destination, demand, self)
-                    pair.calculateKSP(self.k, self.ksp_instance)
-                    self.OD_Pairs.append(pair)
-        self.linksFFTT = self.ksp_instance.getAllLinksFFTT()
-        filen.close()
+                    origin = tokens[2]
+                    destination = tokens[3]
+                    demand = int(float(tokens[4]))
+                    if(origin != destination and demand > 0):
+                        pair = ODPair(origin, destination, demand, self)
+                        pair.calculateKSP(self.k, self.ksp_instance)
+                        self.OD_Pairs.append(pair)
+            self.linksFFTT = self.ksp_instance.getAllLinksFFTT()
+            filen.close()
 
     def writeRoutesToFile(self, outputfilename):
         fileout = open(outputfilename, 'w')
@@ -285,8 +294,11 @@ class ShortestPath:
 
 
 class KSPInstance:
-    def __init__(self, net_filename, KSP_flow=0.0):
-        self.V, self.E, OD_list = KSP.generateGraph(net_filename, KSP_flow)
+    def __init__(self, net_filename, KSP_flow=0.0, node_list=None, edge_list=None, od_matrix=None):
+        if edge_list and node_list and od_matrix:
+            self.V, self.E = node_list, edge_list
+        else:
+            self.V, self.E, OD_list = KSP.generateGraph(net_filename, KSP_flow)
         self.costs = {}
         for link in self.E:
             self.costs[link.name] = link.cost

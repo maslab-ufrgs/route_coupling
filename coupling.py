@@ -13,13 +13,17 @@ Inputs:
 Outputs:
     csv file with data
 '''
-def calculate_coupling(nfile, rfile, sfile, k):
+def calculate_coupling(nfile, rfile, sfile, k, edge_list=None, node_list=None, od_matrix=None):
     ODs = OD.ODSet(k)
     if rfile is not None :
         network_filename = [x for x in rfile.split('/') if x != ''][-1]
         network_name = network_filename.split('.')[0]
         #route file was provided no need to calculate routes
         ODs.loadRoutesFromFile(rfile)
+    elif edge_list and node_list and od_matrix:
+        network_name = nfile
+        #May god bless us all
+        ODs.calculateKSProutes(nfile, edge_list=edge_list, node_list=node_list, od_matrix=od_matrix)
     else:
         network_filename = [x for x in nfile.split('/') if x != ''][-1]
         network_name = network_filename.split('.')[0]
