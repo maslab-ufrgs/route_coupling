@@ -21,7 +21,7 @@ class ODSet:
         if edge_list and node_list and od_matrix:
             self.ksp_instance = KSPInstance(network_filename, edge_list=edge_list,
                     node_list=node_list, od_matrix=od_matrix)
-            for od in od_matrix.keys:
+            for od in od_matrix:
                 pair = ODPair(od.split('|')[0], od.split('|')[1], int(od_matrix[od]), self)
                 pair.calculateKSP(self.k, self.ksp_instance)
                 self.OD_Pairs.append(pair)
