@@ -1,8 +1,6 @@
 #!/usr/bin/python
 import sys
 import OD
-from prettytable import PrettyTable
-import pprint
 
 '''
 Calculates coupling function over network
