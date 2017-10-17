@@ -106,7 +106,7 @@ if __name__ == "__main__":
     prs.add_argument("-nf", dest="nfile", required=False, help="The network file.\n", default=None)
     prs.add_argument("-rf", dest="rfile", required=False, help="The route file.\n",default=None)
     prs.add_argument("-sr", dest="sfile", required=False, help="Simulation results file.\n",default=None)
-    prs.add_argument("-k", dest="k", type=int, default=[8],
+    prs.add_argument("-k", dest="k", type=int, default=8,
                      help="'K' parameters for the KSP (K-ShortestPath) Algorithm.\n")
 
     args = prs.parse_args()
