@@ -17,13 +17,14 @@ class ODSet:
         self.k = k
     ##using the network file and k calculates the shortest
     # paths of every OD pair
-    def calculateKSProutes(self, network_filename, edge_list=None, node_list=None, od_matrix=None):
+    def calculateKSProutes(self, network_filename, edge_list=None, node_list=None, od_matrix=None,
+                           output=False):
         if edge_list and node_list and od_matrix:
             self.ksp_instance = KSPInstance(network_filename, edge_list=edge_list,
                     node_list=node_list, od_matrix=od_matrix)
             for od in od_matrix:
                 pair = ODPair(od.split('|')[0], od.split('|')[1], int(od_matrix[od]), self)
-                pair.calculateKSP(self.k, self.ksp_instance)
+                pair.calculateKSP(self.k, self.ksp_instance, output=output)
                 self.OD_Pairs.append(pair)
             self.linksFFTT = self.ksp_instance.getAllLinksFFTT()
         else:
@@ -41,7 +42,7 @@ class ODSet:
                     demand = int(float(tokens[4]))
                     if(origin != destination and demand > 0):
                         pair = ODPair(origin, destination, demand, self)
-                        pair.calculateKSP(self.k, self.ksp_instance)
+                        pair.calculateKSP(self.k, self.ksp_instance, output=output)
                         self.OD_Pairs.append(pair)
             self.linksFFTT = self.ksp_instance.getAllLinksFFTT()
             filen.close()
@@ -217,9 +218,11 @@ class ODPair:
         self.SPs = []
         self.demand = demand
         self.odset = odset
-    def calculateKSP(self, k, ksp_instance):
+    def calculateKSP(self, k, ksp_instance, output=False):
+        if output:
+            print(self.origin + '|' + self.destination)
         # generate paths
-        routes = ksp_instance.getRoutes(self.origin, self.destination, k)
+        routes = ksp_instance.getRoutes(self.origin, self.destination, k, output=output)
         for route_inx, route in enumerate(routes):
             sp = ShortestPath(self.name + '(' + str(route_inx + 1) + ')', route[0], route[1], self)
             self.SPs.append(sp)
@@ -303,10 +306,13 @@ class KSPInstance:
         for link in self.E:
             self.costs[link.name] = link.cost
 
-    def getRoutes(self, origin, destination, k):
+    def getRoutes(self, origin, destination, k, output=False):
         #print origin, destination
 
-        return KSP.getKRoutes(self.V, self.E, origin, destination, k)
+        routes = KSP.getKRoutes(self.V, self.E, origin, destination, k)
+        if output:
+            print(routes)
+        return routes
 
     ##return dicitionary with the link name as key and FFTT as value
     ##used only on calculateRoutes.py
