@@ -82,7 +82,7 @@ def calculate_coupling(nfile, rfile, sfile, k, edge_list=None, node_list=None, o
 
     textoutput = open(network_name+'.results.csv','w')
     print(network_name)
-    textoutput.write("Route CouplingHop CouplingFFTT\n")
+    textoutput.write("Route CouplingFFTT CouplingHOP\n")
     routeAvgCouplingHOP = {}
     routeAvgCouplingFFTT = {}
     cur_row = 1
@@ -100,7 +100,7 @@ def calculate_coupling(nfile, rfile, sfile, k, edge_list=None, node_list=None, o
         # ok to take the average of percentages bc percentages are wrt to the same total (in this case, #links in SP1)
         routeAvgCouplingHOP[rowSPNames[cur_row]] = float(sumCouplingsHOP)/(nSPs-1)  # -1 because we didn't count the route against itself
         routeAvgCouplingFFTT[rowSPNames[cur_row]] = (float(sumCouplingsFFTT) / (nSPs - 1)) * 100
-        textoutput.write(rowSPNames[cur_row] +' '+ str(routeAvgCouplingHOP[rowSPNames[cur_row]]) +' '+ str(routeAvgCouplingFFTT[rowSPNames[cur_row]]) +'\n' )
+        textoutput.write(rowSPNames[cur_row] +' '+ str(routeAvgCouplingFFTT[rowSPNames[cur_row]]) +' '+ str(routeAvgCouplingHOP[rowSPNames[cur_row]]) +'\n' )
         cur_row = cur_row + 1
     textoutput.close()
 
