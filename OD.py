@@ -1,3 +1,4 @@
+from __future__ import print_function
 from ksp import KSP
 
 epsilonMultiplier = 0.1
@@ -307,11 +308,17 @@ class KSPInstance:
             self.costs[link.name] = link.cost
 
     def getRoutes(self, origin, destination, k, output=False):
-        #print origin, destination
-
         routes = KSP.getKRoutes(self.V, self.E, origin, destination, k)
         if output:
-            print(routes)
+            for route in routes:
+                print('\t', end='')
+                for edge in route[0]:
+                    edge = edge.split('-')
+                    if edge != route[0][-1]:
+                        print(edge[0] + '->', end='')
+                    else:
+                        print(edge[0] + '->' + edge[1] + ', ' + str(route[1]))
+
         return routes
 
     ##return dicitionary with the link name as key and FFTT as value
